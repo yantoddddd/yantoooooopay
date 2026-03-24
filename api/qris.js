@@ -15,7 +15,6 @@ export default async function handler(req, res) {
     }
     
     try {
-        // Panggil API Qrispy sesuai dokumentasi
         const response = await fetch('https://api.qrispy.id/api/payment/qris/generate', {
             method: 'POST',
             headers: {
@@ -24,22 +23,19 @@ export default async function handler(req, res) {
             },
             body: JSON.stringify({
                 amount: nominal,
-                payment_reference: `YTO-${Date.now()}`,
-                return_url: 'https://yanto-pay.vercel.app/thanks' // optional
+                payment_reference: `YTO-${Date.now()}`
             })
         });
         
         const data = await response.json();
         
-        // Cek respons sesuai format Qrispy
         if (data.status === 'success' && data.data) {
             const qrisData = data.data;
-            const trxId = qrisData.qris_id || 'YTO' + Date.now().toString(36).toUpperCase();
+            const trxId = qrisData.qris_id;
             
             return res.status(200).json({
                 success: true,
-                qrUrl: qrisData.qris_image_url,      // URL gambar QRIS
-                qrBase64: qrisData.qris_image_base64, // base64 QRIS (opsional)
+                qrUrl: qrisData.qris_image_url,
                 qrisId: qrisData.qris_id,
                 trxId: trxId,
                 nominal: qrisData.amount,
@@ -48,15 +44,13 @@ export default async function handler(req, res) {
                 phone: DANA_NUMBER,
                 expiredAt: qrisData.expired_at,
                 expiresIn: qrisData.expires_in_seconds,
-                paymentReference: qrisData.payment_reference,
                 timestamp: new Date().toISOString()
             });
         } else {
-            throw new Error(data.message || 'Gagal generate QRIS dari Qrispy');
+            throw new Error(data.message || 'Gagal generate QRIS');
         }
         
     } catch (error) {
-        console.error('Qrispy Error:', error);
         return res.status(500).json({ 
             success: false, 
             error: error.message
