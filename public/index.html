@@ -79,10 +79,8 @@
                 <span class="dana-number">0896-7604-1776</span>
             </div>
             
-            <!-- INFO QRISPY -->
             <div class="info-qrispy">
-                <strong>💡 Cara Kerja Qrispy</strong>
-                QRIS ini menggunakan <strong>Qrispy.id</strong>.<br>
+                <strong>💡 QRIS by Qrispy.id</strong>
                 Uang akan masuk ke akun Qrispy kamu, bisa <strong>withdraw manual</strong> ke rekening (biaya Rp 1.750/penarikan).
             </div>
             
@@ -158,10 +156,20 @@
                 
                 if (data.success && data.qrUrl) {
                     qrImage.src = data.qrUrl;
+                    
+                    let expiredText = '';
+                    if (data.expiredAt) {
+                        expiredText = `<div class="trx-row"><span>⏰ Kadaluarsa</span><span>${new Date(data.expiredAt).toLocaleString()}</span></div>`;
+                    }
+                    if (data.expiresIn) {
+                        expiredText += `<div class="trx-row"><span>⏱️ Berlaku</span><span>${Math.floor(data.expiresIn / 60)} menit</span></div>`;
+                    }
+                    
                     trxInfo.innerHTML = `
                         <div class="trx-row"><span>💰 Nominal</span><span>Rp ${data.nominal.toLocaleString()}</span></div>
                         <div class="trx-row"><span>📱 DANA Tujuan</span><span>${data.phone}</span></div>
                         <div class="trx-row"><span>🆔 Trx ID</span><span>${data.trxId}</span></div>
+                        ${expiredText}
                         <div class="trx-row"><span>⏰ Waktu</span><span>${new Date(data.timestamp).toLocaleString()}</span></div>
                     `;
                     qrBox.style.display = 'block';
