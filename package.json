@@ -1,0 +1,8 @@
+{
+  "name": "yanto-pay",
+  "version": "2.0.0",
+  "description": "QRIS Payment Gateway - YANTO PAY",
+  "dependencies": {
+    "qrcode": "^1.5.3"
+  }
+}
