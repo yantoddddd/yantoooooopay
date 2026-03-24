@@ -12,82 +12,60 @@
         }
 
         body {
-            background: linear-gradient(145deg, #0a1f2c, #05161f);
-            font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
             padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
 
         .container {
             max-width: 500px;
-            width: 100%;
-            background: #fff;
-            border-radius: 40px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
         .header {
-            background: linear-gradient(115deg, #0e3b5e, #0b2c44);
-            padding: 30px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
             text-align: center;
         }
 
         .header h1 {
-            color: #fff;
-            font-size: 2rem;
-            font-weight: 800;
+            font-size: 2em;
+            margin-bottom: 10px;
         }
 
         .header p {
-            color: rgba(255, 255, 255, 0.85);
-            font-size: 0.85rem;
-            margin-top: 6px;
+            opacity: 0.9;
+            font-size: 0.9em;
         }
 
         .content {
-            padding: 24px;
+            padding: 30px;
         }
 
-        .info-card {
-            background: #eef2ff;
-            border-radius: 24px;
-            padding: 14px 18px;
+        .info-box {
+            background: #f0f4ff;
+            border-radius: 15px;
+            padding: 15px;
             margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .info-card span:first-child {
-            font-weight: 600;
-            color: #0e3b5e;
-        }
-
-        .dana-number {
-            font-weight: 800;
-            color: #0e3b5e;
-            background: #fff;
-            padding: 6px 14px;
-            border-radius: 40px;
-            font-family: monospace;
-            font-size: 1rem;
-        }
-
-        .info-qrispy {
-            background: #e6f7e6;
-            border-radius: 20px;
-            padding: 12px;
-            margin-bottom: 24px;
-            font-size: 0.75rem;
             text-align: center;
-            color: #2e7d32;
-            border-left: 4px solid #4caf50;
+        }
+
+        .info-box .label {
+            font-size: 0.8em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .info-box .value {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #667eea;
         }
 
         .amount-grid {
@@ -98,161 +76,152 @@
         }
 
         .amount-btn {
-            background: #f1f5f9;
-            border: 1px solid #e2e8f0;
-            padding: 14px 8px;
-            border-radius: 50px;
+            background: #f5f5f5;
+            border: 2px solid #e0e0e0;
+            padding: 12px;
+            border-radius: 10px;
             text-align: center;
-            font-weight: 700;
             cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.9rem;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .amount-btn:hover {
+            background: #e0e0e0;
+            transform: translateY(-2px);
         }
 
         .amount-btn.active {
-            background: #0e3b5e;
-            border-color: #0e3b5e;
-            color: #fff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
         }
 
-        .pay-btn {
+        .generate-btn {
             width: 100%;
-            background: #0e3b5e;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             border: none;
-            padding: 16px;
-            border-radius: 50px;
-            color: #fff;
-            font-weight: 800;
-            font-size: 1.1rem;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
             cursor: pointer;
-            margin: 16px 0;
-            transition: all 0.2s;
+            margin: 20px 0;
+            transition: transform 0.2s;
         }
 
-        .pay-btn:hover {
-            background: #1a5a7e;
-            transform: scale(1.02);
+        .generate-btn:hover {
+            transform: translateY(-2px);
         }
 
-        .pay-btn:disabled {
+        .generate-btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
         }
 
-        .qr-box {
-            text-align: center;
-            margin-top: 24px;
-            padding: 20px;
-            background: #f8fafc;
-            border-radius: 28px;
+        .qr-result {
             display: none;
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 15px;
         }
 
-        .qr-box img {
+        .qr-result img {
             max-width: 250px;
-            margin: 10px auto;
-            border-radius: 16px;
-            background: #fff;
-            padding: 10px;
+            margin: 15px auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
-        .trx-info {
-            background: #fff;
-            border-radius: 20px;
-            padding: 14px;
-            margin-top: 16px;
+        .transaction-info {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
             text-align: left;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #e0e0e0;
         }
 
-        .trx-row {
+        .info-row {
             display: flex;
             justify-content: space-between;
             padding: 8px 0;
-            border-bottom: 1px solid #eef2f8;
+            border-bottom: 1px solid #f0f0f0;
         }
 
-        .trx-row:last-child {
+        .info-row:last-child {
             border-bottom: none;
         }
 
-        .trx-label {
-            color: #4b6f8e;
-            font-weight: 500;
+        .info-label {
+            color: #666;
+            font-size: 0.9em;
         }
 
-        .trx-value {
-            font-weight: 700;
-            color: #0e3b5e;
-        }
-
-        .note-withdraw {
-            background: #fff3e0;
-            border-radius: 16px;
-            padding: 10px;
-            margin-top: 16px;
-            font-size: 0.7rem;
-            color: #b85c00;
-            text-align: center;
+        .info-value {
+            font-weight: bold;
+            color: #333;
         }
 
         .loading {
+            display: none;
             text-align: center;
             padding: 30px;
-            display: none;
         }
 
         .spinner {
             width: 40px;
             height: 40px;
-            border: 4px solid #e2e8f0;
-            border-top-color: #0e3b5e;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto 12px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
-        .error-msg {
-            background: #fee2e2;
-            border-radius: 20px;
-            padding: 12px;
-            color: #dc2626;
-            text-align: center;
-            margin-top: 20px;
+        .error {
             display: none;
-            font-size: 0.85rem;
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
         }
 
         .footer {
-            background: #f8fafc;
-            padding: 16px;
+            background: #f5f5f5;
+            padding: 15px;
             text-align: center;
-            font-size: 0.7rem;
-            color: #64748b;
-            border-top: 1px solid #eef2f8;
+            font-size: 0.8em;
+            color: #666;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>YANTO PAY</h1>
+            <h1>💰 YANTO PAY</h1>
             <p>QRIS Generator • Top Up DANA</p>
         </div>
         
         <div class="content">
-            <div class="info-card">
-                <span>📱 Nomor DANA Tujuan</span>
-                <span class="dana-number">0896-7604-1776</span>
+            <div class="info-box">
+                <div class="label">📱 Nomor DANA Tujuan</div>
+                <div class="value">0896-7604-1776</div>
             </div>
             
-            <div class="info-qrispy">
-                💡 <strong>QRIS by Qrispy.id</strong><br>
-                Uang masuk ke akun Qrispy, withdraw manual ke rekening (Rp 1.750/penarikan)
+            <div class="info-box">
+                <div class="label">💡 Powered by Qrispy.id</div>
+                <div class="value" style="font-size: 0.9em;">Uang masuk akun Qrispy → Withdraw manual</div>
             </div>
             
             <div class="amount-grid" id="amountGrid">
@@ -266,23 +235,19 @@
                 <div class="amount-btn" data-amount="500000">Rp 500.000</div>
             </div>
             
-            <button id="generateBtn" class="pay-btn">✨ GENERATE QRIS</button>
+            <button class="generate-btn" id="generateBtn">✨ GENERATE QRIS</button>
             
-            <div id="loading" class="loading">
+            <div class="loading" id="loading">
                 <div class="spinner"></div>
-                <div>Menghubungi Qrispy...</div>
+                <p>Menghubungi Qrispy...</p>
             </div>
             
-            <div id="qrBox" class="qr-box">
+            <div class="qr-result" id="qrResult">
                 <img id="qrImage" src="" alt="QRIS">
-                <div id="trxInfo" class="trx-info"></div>
-                <div class="note-withdraw">
-                    💰 Setelah bayar, saldo masuk ke akun Qrispy.<br>
-                    Tarik saldo via dashboard Qrispy (biaya Rp 1.750)
-                </div>
+                <div class="transaction-info" id="transactionInfo"></div>
             </div>
             
-            <div id="errorMsg" class="error-msg"></div>
+            <div class="error" id="error"></div>
         </div>
         
         <div class="footer">
@@ -291,66 +256,97 @@
     </div>
 
     <script>
-        const API_URL = "/api/qris";
         let selectedAmount = 5000;
         
         // Pilih nominal
         document.querySelectorAll('.amount-btn').forEach(btn => {
-            btn.onclick = () => {
+            btn.addEventListener('click', function() {
                 document.querySelectorAll('.amount-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                selectedAmount = parseInt(btn.dataset.amount);
-            };
+                this.classList.add('active');
+                selectedAmount = parseInt(this.dataset.amount);
+            });
         });
+        
+        // Set default active
         document.querySelector('.amount-btn[data-amount="5000"]').classList.add('active');
         
         // Generate QRIS
         const generateBtn = document.getElementById('generateBtn');
         const loadingDiv = document.getElementById('loading');
-        const qrBox = document.getElementById('qrBox');
+        const qrResultDiv = document.getElementById('qrResult');
         const qrImage = document.getElementById('qrImage');
-        const trxInfo = document.getElementById('trxInfo');
-        const errorMsg = document.getElementById('errorMsg');
+        const transactionInfo = document.getElementById('transactionInfo');
+        const errorDiv = document.getElementById('error');
         
-        generateBtn.onclick = async () => {
+        generateBtn.addEventListener('click', async () => {
+            // Reset tampilan
             loadingDiv.style.display = 'block';
-            qrBox.style.display = 'none';
-            errorMsg.style.display = 'none';
+            qrResultDiv.style.display = 'none';
+            errorDiv.style.display = 'none';
             generateBtn.disabled = true;
             
             try {
-                const res = await fetch(`${API_URL}?amount=${selectedAmount}`);
-                const data = await res.json();
+                // Panggil API
+                const response = await fetch(`/api/qris?amount=${selectedAmount}`);
+                const data = await response.json();
                 
-                if (data.success && data.qrUrl) {
-                    qrImage.src = data.qrUrl;
+                if (data.success && data.qrImageUrl) {
+                    // Tampilkan QRIS
+                    qrImage.src = data.qrImageUrl;
                     
-                    let expiredHtml = '';
+                    // Format expired time
+                    let expiredText = '';
                     if (data.expiredAt) {
-                        expiredHtml = `<div class="trx-row"><span class="trx-label">⏰ Kadaluarsa</span><span class="trx-value">${new Date(data.expiredAt).toLocaleString()}</span></div>`;
-                    }
-                    if (data.expiresIn) {
-                        expiredHtml += `<div class="trx-row"><span class="trx-label">⏱️ Berlaku</span><span class="trx-value">${Math.floor(data.expiresIn / 60)} menit</span></div>`;
+                        const expiredDate = new Date(data.expiredAt);
+                        expiredText = `
+                            <div class="info-row">
+                                <span class="info-label">⏰ Kadaluarsa</span>
+                                <span class="info-value">${expiredDate.toLocaleString()}</span>
+                            </div>
+                        `;
                     }
                     
-                    trxInfo.innerHTML = `
-                        <div class="trx-row"><span class="trx-label">💰 Nominal</span><span class="trx-value">Rp ${data.nominal.toLocaleString()}</span></div>
-                        <div class="trx-row"><span class="trx-label">📱 DANA Tujuan</span><span class="trx-value">${data.phone}</span></div>
-                        <div class="trx-row"><span class="trx-label">🆔 ID Transaksi</span><span class="trx-value">${data.trxId}</span></div>
-                        ${expiredHtml}
+                    if (data.expiresIn) {
+                        const minutes = Math.floor(data.expiresIn / 60);
+                        expiredText += `
+                            <div class="info-row">
+                                <span class="info-label">⏱️ Berlaku</span>
+                                <span class="info-value">${minutes} menit</span>
+                            </div>
+                        `;
+                    }
+                    
+                    // Tampilkan info transaksi
+                    transactionInfo.innerHTML = `
+                        <div class="info-row">
+                            <span class="info-label">💰 Nominal</span>
+                            <span class="info-value">Rp ${data.amount.toLocaleString()}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">🆔 ID Transaksi</span>
+                            <span class="info-value">${data.qrisId}</span>
+                        </div>
+                        ${expiredText}
+                        <div class="info-row">
+                            <span class="info-label">📱 DANA Tujuan</span>
+                            <span class="info-value">0896-7604-1776</span>
+                        </div>
                     `;
-                    qrBox.style.display = 'block';
+                    
+                    qrResultDiv.style.display = 'block';
                 } else {
                     throw new Error(data.error || 'Gagal generate QRIS');
                 }
+                
             } catch (err) {
-                errorMsg.innerHTML = '⚠️ ' + err.message;
-                errorMsg.style.display = 'block';
+                errorDiv.innerHTML = `⚠️ ${err.message}`;
+                errorDiv.style.display = 'block';
+                console.error('Error:', err);
             } finally {
                 loadingDiv.style.display = 'none';
                 generateBtn.disabled = false;
             }
-        };
+        });
     </script>
 </body>
 </html>
