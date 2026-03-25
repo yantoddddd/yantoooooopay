@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Top Up Pro</title>
+
+<style>
+body{
+ font-family:sans-serif;
+ background:#0b0b12;
+ color:#fff;
+ display:flex;
+ justify-content:center;
+ padding:20px;
+}
+
+.container{max-width:420px;width:100%}
+
+.card{
+ background:#111827;
+ padding:15px;
+ border-radius:12px;
+ margin-bottom:15px;
+}
+
+select,input,button{
+ width:100%;
+ padding:10px;
+ margin-top:8px;
+ border-radius:8px;
+ border:none;
+}
+
+button{
+ background:#00ffff;
+ font-weight:bold;
+ cursor:pointer;
+}
+
+#result{
+ margin-top:10px;
+ white-space:pre-wrap;
+ color:#00ffff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="card">
+<h2>Top Up</h2>
+<select id="services"></select>
+<input id="target" placeholder="No HP / ID Game">
+<button onclick="order()">Beli</button>
+</div>
+
+<div class="card">
+<h2>Status</h2>
+<div id="result">Ready...</div>
+</div>
+
+</div>
+
+<script>
+let currentRef = null;
+
+// LOAD SERVICES
+async function loadServices(){
+ let res = await fetch("/api/flowix",{
+  method:"POST",
+  headers:{ "Content-Type":"application/json" },
+  body:JSON.stringify({ action:"services" })
+ });
+
+ let data = await res.json();
+
+ let select = document.getElementById("services");
+ select.innerHTML="";
+
+ data.data.forEach(s=>{
+  if(s.status !== "available") return;
+
+  let opt=document.createElement("option");
+  opt.value=s.code;
+  opt.textContent=`${s.name} - Rp${s.price}`;
+  select.appendChild(opt);
+ });
+}
+
+// ORDER
+async function order(){
+ let service=document.getElementById("services").value;
+ let target=document.getElementById("target").value;
+
+ currentRef="TRX-"+Date.now();
+
+ document.getElementById("result").innerText="Processing...";
+
+ let res = await fetch("/api/flowix",{
+  method:"POST",
+  headers:{ "Content-Type":"application/json" },
+  body:JSON.stringify({
+   action:"order",
+   data:{
+    service_code:service,
+    target:target,
+    ref_id:currentRef
+   }
+  })
+ });
+
+ let data=await res.json();
+
+ document.getElementById("result").innerText=
+  "Status: "+data.data.status;
+}
+
+// CHECK STATUS
+async function checkStatus(){
+ if(!currentRef) return;
+
+ let res = await fetch("/api/flowix",{
+  method:"POST",
+  headers:{ "Content-Type":"application/json" },
+  body:JSON.stringify({
+   action:"status",
+   data:{ ref_id:currentRef }
+  })
+ });
+
+ let data=await res.json();
+
+ if(data.data){
+  document.getElementById("result").innerText =
+`Status: ${data.data.status}
+SN: ${data.data.sn || "-"}`;
+ }
+}
+
+setInterval(checkStatus,3000);
+
+loadServices();
+</script>
+
+</body>
+</html>
