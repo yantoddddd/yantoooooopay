@@ -1,3 +1,6 @@
+// In-memory storage (akan reset kalau server restart, tapi cukup buat demo)
+const paidStatus = new Map();
+
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
@@ -15,63 +18,59 @@ export default async function handler(req, res) {
         minimumFractionDigits: 0 
     }).format(n);
     
-    let message = '';
-    
+    // 🔥 Cek event pembayaran sukses
     if (data.event === 'payment.received') {
         const nominal = data.data.amount;
         const qrisId = data.data.qris_id;
         const uniqueId = data.data.unique_id;
         
-        message = `✅ *PEMBAYARAN DITERIMA!*\n\n` +
-            `💰 *${formatRp(nominal)}* telah masuk ke akun mu\n` +
-            `🆔 ID: \`${qrisId}\`\n` +
-            `🔢 Kode: ${uniqueId}\n` +
-            `📅 ${new Date().toLocaleString('id-ID')}\n\n` +
-            `---\nYANTO PAY`;
-    } else {
-        message = `🔔 *Webhook Test*\n\nEvent: ${data.event}\nWaktu: ${new Date().toLocaleString('id-ID')}`;
-    }
-    
-    // Kirim ke Telegram dengan timeout 10 detik
-    try {
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 10000);
+        // 🔥 SIMPAN STATUS PAID (biar bisa diambil qris.html)
+        paidStatus.set(qrisId, { paid: true, amount: nominal, timestamp: Date.now() });
+        console.log(`✅ Status paid disimpan untuk QRIS: ${qrisId}`);
         
-        const tgResponse = await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
+        // Kirim notif Telegram
+        const message = `✅ *PEMBAYARAN DITERIMA!*\n\n` +
+            `💰 *${formatRp(nominal)}* telah masuk ke akun mu\n` +
+            `🆔 ID QRIS: \`${qrisId}\`\n` +
+            `🔢 Kode Unik: ${uniqueId}\n` +
+            `📅 Waktu: ${new Date().toLocaleString('id-ID')}\n\n` +
+            `---\nYANTO PAY`;
+        
+        await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 chat_id: TELEGRAM_CHAT_ID,
                 text: message,
                 parse_mode: 'Markdown'
-            }),
-            signal: controller.signal
+            })
         });
         
-        clearTimeout(timeout);
-        const tgResult = await tgResponse.json();
-        
-        console.log('📨 Telegram response:', tgResult);
-        
-        if (tgResult.ok) {
-            console.log('✅ Telegram berhasil!');
-        } else {
-            console.error('❌ Telegram error:', tgResult);
-        }
+        console.log('✅ Notif Telegram terkirim');
         
         return res.status(200).json({ 
             received: true, 
-            telegram: tgResult.ok,
-            event: data.event
-        });
-        
-    } catch (error) {
-        console.error('❌ Error kirim Telegram:', error);
-        return res.status(200).json({ 
-            received: true, 
-            telegram: false, 
-            error: error.message,
-            event: data.event
+            event: data.event,
+            paid: true,
+            qrisId: qrisId
         });
     }
+    
+    // 🔥 Endpoint buat ngecek status (dipanggil qris.html)
+    if (req.url.includes('/check')) {
+        const urlParams = new URLSearchParams(req.url.split('?')[1]);
+        const qrisId = urlParams.get('qrisId');
+        if (qrisId && paidStatus.has(qrisId)) {
+            return res.status(200).json({ paid: true, amount: paidStatus.get(qrisId).amount });
         }
+        return res.status(200).json({ paid: false });
+    }
+    
+    // Test webhook
+    if (data.event === 'payment.test') {
+        console.log('🔔 Test webhook received');
+        return res.status(200).json({ received: true, event: 'test' });
+    }
+    
+    return res.status(200).json({ received: true, event: data.event });
+}
