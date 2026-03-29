@@ -1,1 +1,153 @@
-<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=yes"><title>QRIS Gen</title><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;700;900&display=swap" rel="stylesheet"><style>*{margin:0;padding:0;box-sizing:border-box}:root{--bg-start:#667eea;--bg-end:#764ba2;--card-bg:rgba(255,255,255,0.95);--text-primary:#333;--input-bg:#fff;--input-border:#e2e8f0;--result-bg:linear-gradient(135deg,#10b981 0%,#059669 100%);--share-btn-bg:#fff;--share-btn-color:#0e3b5e;--shadow:0 20px 40px rgba(0,0,0,0.2);--toast-bg:#333;--toast-color:#fff}body.dark{--bg-start:#1e293b;--bg-end:#0f172a;--card-bg:rgba(30,41,59,0.95);--text-primary:#f1f5f9;--input-bg:#334155;--input-border:#475569;--input-color:#f1f5f9;--result-bg:linear-gradient(135deg,#059669 0%,#047857 100%);--share-btn-bg:#334155;--share-btn-color:#f1f5f9;--shadow:0 20px 40px rgba(0,0,0,0.5);--toast-bg:#1e293b;--toast-color:#f1f5f9}body{font-family:Poppins,sans-serif;background:linear-gradient(135deg,var(--bg-start) 0%,var(--bg-end) 100%);min-height:100vh;padding:20px;transition:all .3s ease}.container{max-width:400px;margin:0 auto;background:var(--card-bg);backdrop-filter:blur(20px);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}.header{background:linear-gradient(135deg,#f59e0b 0%,#d97706 100%);color:#fff;padding:30px 20px;text-align:center;position:relative}.theme-toggle{position:absolute;top:18px;right:18px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.25);border:2px solid rgba(255,255,255,0.6);font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;backdrop-filter:blur(4px);color:#fff}.theme-toggle:hover{background:rgba(255,255,255,0.4);transform:scale(1.05)}h1{font-size:2em;font-weight:900;margin:0}.content{padding:40px 30px 30px}.input-group{margin-bottom:30px}label{display:block;margin-bottom:10px;font-weight:900;color:var(--text-primary);font-size:1.1em}input{width:100%;padding:20px;border:2px solid var(--input-border);border-radius:15px;font-size:1.3em;font-weight:600;background:var(--input-bg);color:var(--input-color);transition:all .3s;box-shadow:0 10px 20px rgba(0,0,0,0.1)}input:focus{border-color:#10b981;outline:0;box-shadow:0 0 0 3px rgba(16,185,129,0.2),0 15px 30px rgba(0,0,0,0.15);transform:translateY(-2px)}button{padding:20px 30px;border:0;border-radius:15px;font-size:1.2em;font-weight:900;cursor:pointer;transition:all .3s;box-shadow:0 10px 25px rgba(0,0,0,0.15);width:100%;margin-bottom:20px}.btn-gen{background:linear-gradient(135deg,#10b981 0%,#059669 100%);color:#fff}.btn-gen:hover,.btn-gen:active{transform:translateY(-3px);box-shadow:0 15px 35px rgba(16,185,129,0.4)}.btn-gen:disabled{opacity:0.6;cursor:not-allowed;transform:none}.loading{display:none;text-align:center;padding:50px}.spinner{width:60px;height:60px;border:5px solid #f3f3f3;border-top:5px solid #667eea;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px}@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}.result{display:none;padding:30px;text-align:center;background:var(--result-bg);color:#fff;border-radius:20px;margin-top:20px}.total-bayar{font-size:2.5em;font-weight:900;margin:20px 0 10px;color:#fff}.detail-trans{margin-top:30px}.detail-title{font-size:1.4em;font-weight:900;margin-bottom:8px}.detail-list{font-size:1.1em;line-height:1.1}.detail-item{margin:2px 0}.qris-final{width:280px;height:280px;border:6px solid #fff;border-radius:0;margin:20px auto;display:block;box-shadow:0 20px 40px rgba(0,0,0,0.4)}.cara-bayar{margin-top:25px;padding:20px;background:rgba(255,255,255,0.2);border-radius:15px;font-size:1em;line-height:1.5}.error{color:#ff4444;font-weight:900;padding:20px;background:rgba(0,0,0,0.1);border-radius:15px}.share-box{margin-top:15px;text-align:center}.share-btn{background:var(--share-btn-bg);color:var(--share-btn-color);border:none;padding:12px 24px;border-radius:40px;font-size:0.9em;font-weight:bold;cursor:pointer;width:auto;display:inline-block;box-shadow:0 2px 8px rgba(0,0,0,0.1)}.share-btn:hover{transform:scale(1.02)}.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--toast-bg);color:var(--toast-color);padding:12px 24px;border-radius:50px;font-size:0.9rem;font-weight:500;box-shadow:0 4px 12px rgba(0,0,0,0.2);z-index:1000;transition:transform 0.3s ease;pointer-events:none}.toast.show{transform:translateX(-50%) translateY(0)}@media(max-width:480px){h1{font-size:1.6em}.total-bayar{font-size:2em}.qris-final{width:260px;height:260px}}</style></head><body><div class="container"><div class="header"><button class="theme-toggle" id="t"></button><h1>🔷 QRIS Gen</h1></div><div class="content"><div class="input-group"><label>💰 Nominal (Rp)</label><input type="number" id="a" min="100" placeholder="Min Rp100"></div><button class="btn-gen" id="b">✨ Generate QRIS</button><div class="loading" id="c"><div class="spinner"></div><p>🔄 Generating...</p></div></div><div class="result" id="d"></div></div><div id="e" class="toast">✅ Link berhasil disalin!</div><script>eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--)d[e(c)]=k[c]||e(c);k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('8(){9 2=9(0){3 4.5.6(7,0)};9 1=2([0-9]);9 3=2([0-9]);9 4=2([0-9]);9 5=2([0-9]);9 6=9(0){3 7.8.9(\'a\',{b:\'c\',d:\'e\',f:0}).g(0)};9 7=9(){9 8=4.9(\'b\');9 0=10(4.9(\'a\').c);if(!0||0<100){2(\'⚠️ d Rp 100!\');3}8.e=!0;8.f=\'⏳ g...\';4.9(\'c\').h.i=\'j\';4.9(\'d\').h.i=\'k\';l{9 m=4.5(\'${1}/m/n/o/p/q\',{r:\'s\',t:{u:\'v\',w:\'x\'},y:z({A:0})});9 B=C(m);if(B.D===\'E\'){9 F=B.G.H;9 I=\'YNT-\'+J();9 K=B.G.A-0;9 L=\'${M.N}/O.html?P=\'+I;9 Q=B.G.R;S({T:I,U:F,V:0,W:B.G.A,X:K,Y:Q,Z:B.G._});4.9(\'d\').aa=`<ab ac="ad">${6(B.G.A)}</ab><ae af="ag"><ah ai="aj">ak al</ah><am an="ao"><ap aq="ar">ID: ${I}</ap><ap aq="ar">as: ${6(0)}</ap><ap aq="ar">at: ${6(K)}</ap></am></ae><au av="${F}" aw="ax"><ay az="aA">📱 aB aC aD aE</ay><aF aG="aH"><aH aI="aJ">📋 aK</aH></aF>`;4.9(\'d\').h.i=\'j\';4.9(\'d\').aL({aM:\'aN\'});4.9(\'aJ\').aO=()=>{aP.aQ.aR(aS);2(\'✅ aT aU aV!\')}}aT aW B.aX||\'aY aZ\'}ba{4.9(\'d\').bb=`<bc bd="be">⚠️ aX: ${B}</bc>`;4.9(\'d\').h.i=\'j\'}bf{8.e=!1;8.f=\'✨ aY aZ\';4.9(\'c\').h.i=\'k\'}}4.9(\'a\').bg(\'bh\',8(0){0.bi.bj=0.bi.bj.bk(/\D/g,\'\')});4.9(\'b\').bg(\'bh\',7);4.bl(\'bm\',8(0){if(0.bn===\'bo\')7()});9 bp=4.9(\'t\');if(bq.br(\'bs\')===\'bt\'){bu.bv.bw(\'bx\');bp.by=\'☀️\'}bp.bz(\'bh\',()=>{bu.bv.bA(\'bx\');9 bB=bu.bv.bC(\'bx\');bq.bD(\'bs\',bB?\'bt\':\'bE\');bp.by=bB?\'☀️\':\'🌙\'})})();',62,113,'|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||'.split('|'),0,{}));</script></body></html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=yes">
+    <title>YANTO PAY - QRIS Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:Poppins,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:20px;display:flex;align-items:center;justify-content:center}
+        .container{max-width:450px;width:100%;background:rgba(255,255,255,0.98);border-radius:48px;box-shadow:0 30px 60px rgba(0,0,0,0.3);overflow:hidden}
+        .header{background:linear-gradient(115deg,#0e3b5e,#0b2c44);padding:28px;text-align:center;position:relative}
+        .header h1{color:#fff;font-size:1.8rem;font-weight:800}
+        .theme-toggle{position:absolute;top:16px;right:16px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.5);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;color:#fff;font-size:1.2rem}
+        .theme-toggle:hover{background:rgba(255,255,255,0.35);transform:scale(1.05)}
+        .content{padding:32px 28px}
+        .input-group{margin-bottom:28px}
+        label{display:block;margin-bottom:10px;font-weight:700;color:#1e293b;font-size:0.9rem}
+        input{width:100%;padding:18px;border:2px solid #e2e8f0;border-radius:28px;font-size:1.2rem;font-weight:600;background:#fff;transition:all .3s}
+        input:focus{border-color:#10b981;outline:none;box-shadow:0 0 0 3px rgba(16,185,129,0.2);transform:translateY(-2px)}
+        button{padding:18px;border:0;border-radius:32px;font-size:1.1rem;font-weight:800;cursor:pointer;transition:all .3s;width:100%;margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:8px}
+        .btn-gen{background:linear-gradient(135deg,#10b981 0%,#059669 100%);color:#fff}
+        .btn-gen:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(16,185,129,0.4)}
+        .btn-gen:disabled{opacity:0.6;cursor:not-allowed;transform:none}
+        .loading{display:none;text-align:center;padding:40px}
+        .spinner{width:50px;height:50px;border:4px solid #e2e8f0;border-top-color:#667eea;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 15px}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .result{display:none;margin-top:20px;padding:24px;background:linear-gradient(135deg,#10b981 0%,#059669 100%);border-radius:32px;text-align:center;color:#fff}
+        .total-bayar{font-size:2.2rem;font-weight:800;margin:10px 0}
+        .qris-final{width:260px;height:260px;margin:15px auto;display:block;border-radius:20px;box-shadow:0 10px 25px rgba(0,0,0,0.2);border:3px solid #fff}
+        .share-btn{background:#fff;color:#0e3b5e;border:none;padding:12px 20px;border-radius:40px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;margin-top:15px}
+        .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:#1e293b;color:#fff;padding:12px 24px;border-radius:50px;font-size:0.85rem;z-index:1000;transition:transform 0.3s;pointer-events:none}
+        .toast.show{transform:translateX(-50%) translateY(0)}
+        .detail-list{font-size:0.85rem;text-align:left;margin:15px 0;padding:15px;background:rgba(255,255,255,0.15);border-radius:24px}
+        .detail-item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.2)}
+        .detail-item:last-child{border-bottom:none}
+        @media(max-width:480px){.container{margin-top:0}.total-bayar{font-size:1.8rem}.qris-final{width:220px;height:220px}}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <button class="theme-toggle" id="themeToggle">🌙</button>
+        <h1>💠 YANTO PAY</h1>
+    </div>
+    <div class="content">
+        <div class="input-group">
+            <label>💰 Nominal (Rp)</label>
+            <input type="number" id="amount" min="100" placeholder="Min Rp100">
+        </div>
+        <button class="btn-gen" id="btnGen">
+            ✨ Generate QRIS
+        </button>
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Memproses QRIS...</p>
+        </div>
+        <div class="result" id="result"></div>
+    </div>
+</div>
+<div id="toast" class="toast">✅ Link berhasil disalin!</div>
+
+<script>
+(async function(){
+    const API_URL = '/api/qris';
+    let isProcessing = false;
+    let currentShareLink = '';
+
+    function formatRp(angka){
+        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
+    }
+
+    function showToast(msg){
+        const toast = document.getElementById('toast');
+        toast.textContent = msg || '✅ Link berhasil disalin!';
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
+    }
+
+    async function generateQRIS(){
+        if(isProcessing) return;
+        const amount = parseInt(document.getElementById('amount').value);
+        if(!amount || amount < 100){
+            showToast('⚠️ Minimal Rp 100!');
+            return;
+        }
+        isProcessing = true;
+        const btn = document.getElementById('btnGen');
+        const loading = document.getElementById('loading');
+        const resultDiv = document.getElementById('result');
+        
+        btn.disabled = true;
+        loading.style.display = 'block';
+        resultDiv.style.display = 'none';
+        
+        try{
+            const response = await fetch(`${API_URL}?amount=${amount}`);
+            const data = await response.json();
+            
+            if(data.success && data.qrUrl){
+                currentShareLink = `${window.location.origin}/qris.html?id=${data.trxId || 'DEMO'}`;
+                
+                resultDiv.innerHTML = `
+                    <div class="total-bayar">${formatRp(data.amount)}</div>
+                    <img src="${data.qrUrl}" class="qris-final" alt="QRIS">
+                    <div class="detail-list">
+                        <div class="detail-item"><span>🆔 ID Transaksi</span><span>${data.trxId || 'YNTO-' + Date.now().toString(36).toUpperCase()}</span></div>
+                        <div class="detail-item"><span>💰 Nominal</span><span>${formatRp(amount)}</span></div>
+                        <div class="detail-item"><span>💸 Total</span><span>${formatRp(data.amount)}</span></div>
+                    </div>
+                    <button class="share-btn" id="shareBtn">
+                        📋 Bagikan
+                    </button>
+                `;
+                
+                resultDiv.style.display = 'block';
+                document.getElementById('shareBtn')?.addEventListener('click', () => {
+                    navigator.clipboard.writeText(currentShareLink);
+                    showToast('✅ Link berhasil disalin!');
+                });
+            } else {
+                throw new Error(data.error || 'Gagal generate QRIS');
+            }
+        } catch(e){
+            let errMsg = e.message;
+            if(errMsg.includes('minimum') || errMsg.includes('minimal')) {
+                errMsg = '⚠️ Minimal nominal Rp 5.000 (kebijakan API)';
+            }
+            resultDiv.innerHTML = `<div style="color:#ff4444;padding:20px">${errMsg}</div>`;
+            resultDiv.style.display = 'block';
+        } finally {
+            isProcessing = false;
+            btn.disabled = false;
+            loading.style.display = 'none';
+        }
+    }
+    
+    document.getElementById('btnGen').addEventListener('click', generateQRIS);
+    document.getElementById('amount').addEventListener('input', e => e.target.value = e.target.value.replace(/\D/g, ''));
+    document.addEventListener('keypress', e => { if(e.key === 'Enter') generateQRIS(); });
+    
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    if(localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
+    themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark');
+        localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+        themeToggle.innerHTML = document.body.classList.contains('dark') ? '☀️' : '🌙';
+    });
+})();
+</script>
+</body>
+  </html>
