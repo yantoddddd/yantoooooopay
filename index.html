@@ -8,7 +8,7 @@
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:Poppins,sans-serif;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:20px;display:flex;align-items:center;justify-content:center}
-        .container{max-width:450px;width:100%;background:rgba(255,255,255,0.98);border-radius:48px;box-shadow:0 30px 60px rgba(0,0,0,0.3);overflow:hidden}
+        .container{max-width:450px;width:100%;background:#fff;border-radius:48px;box-shadow:0 30px 60px rgba(0,0,0,0.3);overflow:hidden}
         .header{background:linear-gradient(115deg,#0e3b5e,#0b2c44);padding:28px;text-align:center;position:relative}
         .header h1{color:#fff;font-size:1.8rem;font-weight:800}
         .theme-toggle{position:absolute;top:16px;right:16px;width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.2);border:2px solid rgba(255,255,255,0.5);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;color:#fff;font-size:1.2rem}
@@ -18,7 +18,7 @@
         label{display:block;margin-bottom:10px;font-weight:700;color:#1e293b;font-size:0.9rem}
         input{width:100%;padding:18px;border:2px solid #e2e8f0;border-radius:28px;font-size:1.2rem;font-weight:600;background:#fff;transition:all .3s}
         input:focus{border-color:#10b981;outline:none;box-shadow:0 0 0 3px rgba(16,185,129,0.2);transform:translateY(-2px)}
-        button{padding:18px;border:0;border-radius:32px;font-size:1.1rem;font-weight:800;cursor:pointer;transition:all .3s;width:100%;margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:8px}
+        button{padding:18px;border:0;border-radius:32px;font-size:1.1rem;font-weight:800;cursor:pointer;transition:all .3s;width:100%;margin-bottom:20px}
         .btn-gen{background:linear-gradient(135deg,#10b981 0%,#059669 100%);color:#fff}
         .btn-gen:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(16,185,129,0.4)}
         .btn-gen:disabled{opacity:0.6;cursor:not-allowed;transform:none}
@@ -28,7 +28,7 @@
         .result{display:none;margin-top:20px;padding:24px;background:linear-gradient(135deg,#10b981 0%,#059669 100%);border-radius:32px;text-align:center;color:#fff}
         .total-bayar{font-size:2.2rem;font-weight:800;margin:10px 0}
         .qris-final{width:260px;height:260px;margin:15px auto;display:block;border-radius:20px;box-shadow:0 10px 25px rgba(0,0,0,0.2);border:3px solid #fff}
-        .share-btn{background:#fff;color:#0e3b5e;border:none;padding:12px 20px;border-radius:40px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:8px;margin-top:15px}
+        .share-btn{background:#fff;color:#0e3b5e;border:none;padding:12px 20px;border-radius:40px;font-weight:700;cursor:pointer;display:inline-block;margin-top:15px}
         .toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(100px);background:#1e293b;color:#fff;padding:12px 24px;border-radius:50px;font-size:0.85rem;z-index:1000;transition:transform 0.3s;pointer-events:none}
         .toast.show{transform:translateX(-50%) translateY(0)}
         .detail-list{font-size:0.85rem;text-align:left;margin:15px 0;padding:15px;background:rgba(255,255,255,0.15);border-radius:24px}
@@ -48,106 +48,47 @@
             <label>💰 Nominal (Rp)</label>
             <input type="number" id="amount" min="100" placeholder="Min Rp100">
         </div>
-        <button class="btn-gen" id="btnGen">
-            ✨ Generate QRIS
-        </button>
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>Memproses QRIS...</p>
-        </div>
+        <button class="btn-gen" id="btnGen">✨ Generate QRIS</button>
+        <div class="loading" id="loading"><div class="spinner"></div><p>Memproses QRIS...</p></div>
         <div class="result" id="result"></div>
     </div>
 </div>
 <div id="toast" class="toast">✅ Link berhasil disalin!</div>
-
 <script>
 (async function(){
     const API_URL = '/api/qris';
     let isProcessing = false;
     let currentShareLink = '';
 
-    function formatRp(angka){
-        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka);
-    }
-
-    function showToast(msg){
-        const toast = document.getElementById('toast');
-        toast.textContent = msg || '✅ Link berhasil disalin!';
-        toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2000);
-    }
+    function formatRp(angka){ return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka); }
+    function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg||'✅ Link berhasil disalin!'; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); }
 
     async function generateQRIS(){
         if(isProcessing) return;
         const amount = parseInt(document.getElementById('amount').value);
-        if(!amount || amount < 100){
-            showToast('⚠️ Minimal Rp 100!');
-            return;
-        }
-        isProcessing = true;
-        const btn = document.getElementById('btnGen');
-        const loading = document.getElementById('loading');
-        const resultDiv = document.getElementById('result');
-        
-        btn.disabled = true;
-        loading.style.display = 'block';
-        resultDiv.style.display = 'none';
-        
+        if(!amount || amount < 100){ showToast('⚠️ Minimal Rp 100!'); return; }
+        isProcessing=true;
+        const btn=document.getElementById('btnGen'), loading=document.getElementById('loading'), resDiv=document.getElementById('result');
+        btn.disabled=true; loading.style.display='block'; resDiv.style.display='none';
         try{
-            const response = await fetch(`${API_URL}?amount=${amount}`);
-            const data = await response.json();
-            
+            const res=await fetch(`${API_URL}?amount=${amount}`);
+            const data=await res.json();
             if(data.success && data.qrUrl){
                 currentShareLink = `${window.location.origin}/qris.html?id=${data.trxId || 'DEMO'}`;
-                
-                resultDiv.innerHTML = `
-                    <div class="total-bayar">${formatRp(data.amount)}</div>
-                    <img src="${data.qrUrl}" class="qris-final" alt="QRIS">
-                    <div class="detail-list">
-                        <div class="detail-item"><span>🆔 ID Transaksi</span><span>${data.trxId || 'YNTO-' + Date.now().toString(36).toUpperCase()}</span></div>
-                        <div class="detail-item"><span>💰 Nominal</span><span>${formatRp(amount)}</span></div>
-                        <div class="detail-item"><span>💸 Total</span><span>${formatRp(data.amount)}</span></div>
-                    </div>
-                    <button class="share-btn" id="shareBtn">
-                        📋 Bagikan
-                    </button>
-                `;
-                
-                resultDiv.style.display = 'block';
-                document.getElementById('shareBtn')?.addEventListener('click', () => {
-                    navigator.clipboard.writeText(currentShareLink);
-                    showToast('✅ Link berhasil disalin!');
-                });
-            } else {
-                throw new Error(data.error || 'Gagal generate QRIS');
-            }
-        } catch(e){
-            let errMsg = e.message;
-            if(errMsg.includes('minimum') || errMsg.includes('minimal')) {
-                errMsg = '⚠️ Minimal nominal Rp 5.000 (kebijakan API)';
-            }
-            resultDiv.innerHTML = `<div style="color:#ff4444;padding:20px">${errMsg}</div>`;
-            resultDiv.style.display = 'block';
-        } finally {
-            isProcessing = false;
-            btn.disabled = false;
-            loading.style.display = 'none';
-        }
+                resDiv.innerHTML = `<div class="total-bayar">${formatRp(data.amount)}</div><img src="${data.qrUrl}" class="qris-final"><div class="detail-list"><div class="detail-item"><span>🆔 ID</span><span>${data.trxId || 'YNTO-'+Date.now().toString(36).toUpperCase()}</span></div><div class="detail-item"><span>💰 Nominal</span><span>${formatRp(amount)}</span></div><div class="detail-item"><span>💸 Total</span><span>${formatRp(data.amount)}</span></div></div><button class="share-btn" id="shareBtn">📋 Bagikan</button>`;
+                resDiv.style.display='block';
+                document.getElementById('shareBtn')?.addEventListener('click',()=>{ navigator.clipboard.writeText(currentShareLink); showToast('✅ Link berhasil disalin!'); });
+            } else throw new Error(data.error||'Gagal generate QRIS');
+        } catch(e){ resDiv.innerHTML = `<div style="color:#ff4444;padding:20px">⚠️ Error: ${e.message}</div>`; resDiv.style.display='block';
+        } finally { isProcessing=false; btn.disabled=false; loading.style.display='none'; }
     }
-    
-    document.getElementById('btnGen').addEventListener('click', generateQRIS);
-    document.getElementById('amount').addEventListener('input', e => e.target.value = e.target.value.replace(/\D/g, ''));
-    document.addEventListener('keypress', e => { if(e.key === 'Enter') generateQRIS(); });
-    
-    // Theme toggle
-    const themeToggle = document.getElementById('themeToggle');
-    if(localStorage.getItem('theme') === 'dark') document.body.classList.add('dark');
-    themeToggle.addEventListener('click', () => {
-        document.body.classList.toggle('dark');
-        localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-        themeToggle.innerHTML = document.body.classList.contains('dark') ? '☀️' : '🌙';
-    });
+    document.getElementById('btnGen').addEventListener('click',generateQRIS);
+    document.getElementById('amount').addEventListener('input',e=>e.target.value=e.target.value.replace(/\D/g,''));
+    document.addEventListener('keypress',e=>{if(e.key==='Enter')generateQRIS()});
+    const tt=document.getElementById('themeToggle');
+    if(localStorage.getItem('theme')==='dark') document.body.classList.add('dark');
+    tt.addEventListener('click',()=>{ document.body.classList.toggle('dark'); localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light'); tt.innerHTML=document.body.classList.contains('dark')?'☀️':'🌙'; });
 })();
 </script>
 </body>
-  </html>
+    </html>
