@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=yes">
     <title>Login - YANTO PAY</title>
-    <script src="admin.js"></script>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:system-ui;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:20px;display:flex;align-items:center;justify-content:center}
@@ -19,6 +18,9 @@
         button{width:100%;padding:16px;border:0;border-radius:32px;font-size:1rem;font-weight:800;cursor:pointer;background:linear-gradient(135deg,#10b981 0%,#059669 100%);color:#fff}
         button:hover{transform:translateY(-2px)}
         .error{color:#dc2626;font-size:0.85rem;margin-top:12px;text-align:center}
+        .loading{display:none;text-align:center;margin-top:12px}
+        .spinner{width:30px;height:30px;border:3px solid #e2e8f0;border-top-color:#10b981;border-radius:50%;animation:spin 0.6s linear infinite;margin:0 auto}
+        @keyframes spin{to{transform:rotate(360deg)}}
     </style>
 </head>
 <body>
@@ -32,19 +34,38 @@
             <input type="password" id="password" placeholder="Masukkan password">
         </div>
         <button id="loginBtn">Login</button>
+        <div id="loading" class="loading"><div class="spinner"></div></div>
         <div id="errorMsg" class="error"></div>
     </div>
 </div>
 
 <script>
-    document.getElementById('loginBtn').onclick = () => {
+    document.getElementById('loginBtn').onclick = async () => {
         const pwd = document.getElementById('password').value;
-        // Cek password dari admin.js
-        if(typeof ADMIN_PASSWORD !== 'undefined' && pwd === ADMIN_PASSWORD){
-            sessionStorage.setItem('yanto_admin_logged_in', 'true');
-            window.location.href = 'index.html';
-        } else {
-            document.getElementById('errorMsg').innerHTML = '❌ Password salah!';
+        const btn = document.getElementById('loginBtn');
+        const loading = document.getElementById('loading');
+        const errorMsg = document.getElementById('errorMsg');
+        
+        btn.disabled = true;
+        loading.style.display = 'block';
+        errorMsg.innerHTML = '';
+        
+        try {
+            const res = await fetch(`/api/admin?password=${encodeURIComponent(pwd)}`);
+            const data = await res.json();
+            
+            if(data.success){
+                sessionStorage.setItem('yanto_admin_logged_in', 'true');
+                window.location.href = 'index.html';
+            } else {
+                errorMsg.innerHTML = '❌ Password salah!';
+                btn.disabled = false;
+                loading.style.display = 'none';
+            }
+        } catch(e) {
+            errorMsg.innerHTML = '❌ Error koneksi!';
+            btn.disabled = false;
+            loading.style.display = 'none';
         }
     };
     
@@ -53,4 +74,4 @@
     });
 </script>
 </body>
-  </html>
+</html>
