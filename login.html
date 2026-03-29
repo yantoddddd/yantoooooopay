@@ -1,1 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=yes">
+    <title>Login - YANTO PAY</title>
+    <script src="admin.js"></script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:system-ui;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);min-height:100vh;padding:20px;display:flex;align-items:center;justify-content:center}
+        .container{max-width:380px;width:100%;background:#fff;border-radius:48px;box-shadow:0 30px 60px rgba(0,0,0,0.3);overflow:hidden}
+        .header{background:linear-gradient(115deg,#0e3b5e,#0b2c44);padding:32px;text-align:center}
+        .header h1{color:#fff;font-size:1.6rem;font-weight:800}
+        .content{padding:32px}
+        .input-group{margin-bottom:24px}
+        label{display:block;margin-bottom:8px;font-weight:600;color:#1e293b}
+        input{width:100%;padding:16px;border:2px solid #e2e8f0;border-radius:28px;font-size:1rem}
+        input:focus{border-color:#10b981;outline:none}
+        button{width:100%;padding:16px;border:0;border-radius:32px;font-size:1rem;font-weight:800;cursor:pointer;background:linear-gradient(135deg,#10b981 0%,#059669 100%);color:#fff}
+        button:hover{transform:translateY(-2px)}
+        .error{color:#dc2626;font-size:0.85rem;margin-top:12px;text-align:center}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🔐 YANTO PAY</h1>
+    </div>
+    <div class="content">
+        <div class="input-group">
+            <label>🔑 Password Admin</label>
+            <input type="password" id="password" placeholder="Masukkan password">
+        </div>
+        <button id="loginBtn">Login</button>
+        <div id="errorMsg" class="error"></div>
+    </div>
+</div>
 
+<script>
+    document.getElementById('loginBtn').onclick = () => {
+        const pwd = document.getElementById('password').value;
+        // Cek password dari admin.js
+        if(typeof ADMIN_PASSWORD !== 'undefined' && pwd === ADMIN_PASSWORD){
+            sessionStorage.setItem('yanto_admin_logged_in', 'true');
+            window.location.href = 'index.html';
+        } else {
+            document.getElementById('errorMsg').innerHTML = '❌ Password salah!';
+        }
+    };
+    
+    document.getElementById('password').addEventListener('keypress', (e) => {
+        if(e.key === 'Enter') document.getElementById('loginBtn').click();
+    });
+</script>
+</body>
+  </html>
